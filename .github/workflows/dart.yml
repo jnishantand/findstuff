@@ -1,0 +1,40 @@
+name: Flutter CI
+
+on:
+  push:
+    branches: [ "main" ]        # Runs only when you push to main
+  pull_request:
+    branches: [ "main" ]        # Runs when a PR targets main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Install Flutter
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.32.8' # Match your local Flutter version
+          channel: stable
+
+      # Install dependencies
+      - name: Install dependencies
+        run: flutter pub get
+
+      # Analyze code
+      - name: Analyze project source
+        run: flutter analyze
+
+      # Run tests (if any in test/)
+      - name: Run tests
+        run: flutter test
+
+      # Build Android APK
+      - name: Build Android APK
+        run: flutter build apk --release
+
+      # Build Web app
+      - name: Build Web
+        run: flutter build web
