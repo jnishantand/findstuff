@@ -16,12 +16,20 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+        isCoreLibraryDesugaringEnabled = true
     }
 
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
 
+    dependencies {
+        implementation("androidx.core:core-ktx:1.10.1")
+        coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
+
+
+        // other dependencies like firebase, flutter_local_notifications etc.
+    }
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.example.find_stuff"
