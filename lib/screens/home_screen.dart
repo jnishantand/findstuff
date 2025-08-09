@@ -4,6 +4,7 @@ import 'package:find_stuff/models/categories.dart' show Category;
 import 'package:find_stuff/screens/add_item.dart' show AddFoundItemPage;
 import 'package:find_stuff/screens/details.dart' show ItemDetailsPage;
 import 'package:find_stuff/screens/login_screen.dart';
+import 'package:find_stuff/screens/my_list.dart' show MyFoundItemsPage;
 import 'package:find_stuff/screens/notification_screen.dart';
 import 'package:find_stuff/screens/profile_screen.dart';
 import 'package:find_stuff/services/local/shared_prefrence.dart'
@@ -83,7 +84,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
           width: MediaQuery.of(context).size.width * 0.8,
-          child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
                 children: [
@@ -92,6 +94,23 @@ class _HomeScreenState extends State<HomeScreen> {
                     title: const Text('Profile'),
                     onTap: () {
                       Get.to(() => const ProfileScreen());
+                    },
+                  ),
+
+                  ListTile(
+                    leading: const Icon(Icons.list),
+                    title: const Text('My Posts'),
+                    onTap: () async {
+                      try {
+                        Get.to(() => const MyFoundItemsPage());
+                      } catch (e) {
+                        debugPrint("Error navigating to My Posts: $e");
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Failed to load your posts'),
+                          ),
+                        );
+                      }
                     },
                   ),
                   ListTile(
@@ -112,13 +131,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       }
                     },
                   ),
+
                 ],
               ),
-              Text("Version 1.0.0",
-                style: TextStyle(
-                  color: Colors.grey.shade600,
-                  fontSize: 12,
-                ),
+              Text(
+                "Version 1.0.0",
+                style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
               ),
             ],
           ),
@@ -256,7 +274,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   itemName: data['title'] ?? 'No title',
                                   location: data['address'] ?? 'NA',
                                   uploaderUserId: 'user123',
-                                  uploaderPhoneNumber: '+911234567890',
+                                  uploaderPhoneNumber: data['contact']??"NA",
                                   description:
                                       data['description'] ?? 'No description',
                                 ),
@@ -271,7 +289,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                   fit: BoxFit.cover,
                                 )
                               : const Icon(Icons.image_not_supported),
-                          title: CustomText(text:data['title'] ?? 'No title',isBold: true,),
+                          title: CustomText(
+                            text: data['title'] ?? 'No title',
+                            isBold: true,
+                          ),
                           subtitle: Text(data['address'] ?? ''),
                         );
                       },

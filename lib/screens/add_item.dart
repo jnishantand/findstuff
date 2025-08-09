@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:find_stuff/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth;
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -20,6 +22,8 @@ class _AddFoundItemPageState extends State<AddFoundItemPage> {
   final titleController = TextEditingController();
   final descController = TextEditingController();
   final addressController = TextEditingController();
+  final contactController = TextEditingController();
+
   bool isLoading = false;
 
   Future<void> requestPermissions() async {
@@ -74,8 +78,10 @@ class _AddFoundItemPageState extends State<AddFoundItemPage> {
         'address': addressController.text.trim(),
         'lat': null,
         'lng': null,
+        'contact': contactController.text.trim()??"", // optional contact info
         'imageUrl': imageUrl ?? '', // empty if no image
         'createdAt': FieldValue.serverTimestamp(),
+        'userId': await FirebaseAuth.instance.currentUser?.uid, // replace with actual user ID
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -153,6 +159,13 @@ class _AddFoundItemPageState extends State<AddFoundItemPage> {
                 controller: addressController,
                 decoration: const InputDecoration(labelText: "Address"),
                 validator: (v) => v!.isEmpty ? "Enter address" : null,
+              ),
+              const SizedBox(height: 10),
+              TextFormField(
+                controller: contactController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(labelText: "Contact"),
+                validator: (v) => v!.isEmpty ? "Enter contact" : null,
               ),
               const SizedBox(height: 10),
 
