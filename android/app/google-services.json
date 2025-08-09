@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "419013838402",
+    "project_id": "find-stuff-2131a",
+    "storage_bucket": "find-stuff-2131a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:419013838402:android:286d53c0b74178da4e4fdb",
+        "android_client_info": {
+          "package_name": "com.example.find_stuff"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNVAcURqBFYt0s5LwMOOfdLkRc4nqJzlc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
