@@ -23,4 +23,7 @@ void main() {
     expect(find.text('1'), findsOneWidget);
   });
   */
+  test('Placeholder test', () {
+    expect(1 + 1, 2);
+  });
 }
