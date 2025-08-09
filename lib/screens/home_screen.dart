@@ -28,9 +28,11 @@ class _HomeScreenState extends State<HomeScreen> {
     return FirebaseFirestore.instance
         .collection('categories')
         .snapshots()
-        .map((snapshot) => snapshot.docs
-        .map((doc) => Category.fromMap(doc.data(), doc.id))
-        .toList());
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => Category.fromMap(doc.data(), doc.id))
+              .toList(),
+        );
   }
 
   Stream<QuerySnapshot> getFoundItemsStream() {
@@ -44,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return FirebaseFirestore.instance
         .collection('found_items')
         .where('categoryId', isEqualTo: selectedCategoryId)
-        .orderBy('createdAt', descending: true)
+        //.orderBy('createdAt', descending: true) // comment this out temporarily
         .snapshots();
   }
 
@@ -153,21 +155,29 @@ class _HomeScreenState extends State<HomeScreen> {
                             });
                           },
                           child: Card(
-                            color: isSelected ? Constants.primaryColor : Colors.white,
+                            color: isSelected
+                                ? Constants.primaryColor
+                                : Colors.white,
                             child: Container(
                               width: 140,
                               padding: const EdgeInsets.all(8),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Icon(Icons.category,
-                                      size: 40,
-                                      color: isSelected ? Colors.white : Constants.primaryColor),
+                                  Icon(
+                                    Icons.category,
+                                    size: 40,
+                                    color: isSelected
+                                        ? Colors.white
+                                        : Constants.primaryColor,
+                                  ),
                                   const SizedBox(height: 8),
                                   Text(
                                     category.name,
                                     style: TextStyle(
-                                      color: isSelected ? Colors.white : Colors.black,
+                                      color: isSelected
+                                          ? Colors.white
+                                          : Colors.black,
                                       fontWeight: FontWeight.bold,
                                     ),
                                     textAlign: TextAlign.center,
@@ -205,14 +215,18 @@ class _HomeScreenState extends State<HomeScreen> {
                         final imageUrl = data['imageUrl'] as String?;
                         return ListTile(
                           leading: (imageUrl != null && imageUrl.isNotEmpty)
-                              ? Image.network(imageUrl, width: 60, height: 60, fit: BoxFit.cover)
+                              ? Image.network(
+                                  imageUrl,
+                                  width: 60,
+                                  height: 60,
+                                  fit: BoxFit.cover,
+                                )
                               : const Icon(Icons.image_not_supported),
                           title: Text(data['title'] ?? 'No title'),
                           subtitle: Text(data['address'] ?? ''),
                         );
                       },
                     );
-
                   },
                 ),
               ),
