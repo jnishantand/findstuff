@@ -1,4 +1,7 @@
+import 'package:find_stuff/screens/login_screen.dart';
 import 'package:find_stuff/screens/profile_screen.dart';
+import 'package:find_stuff/services/local/shared_prefrence.dart' show SharedPrefsHelper;
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -11,6 +14,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  FirebaseAuth _auth = FirebaseAuth.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,6 +40,19 @@ class _HomeScreenState extends State<HomeScreen> {
                 title: Text('Profile'),
                 onTap: () {
                   Get.to(ProfileScreen());
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.door_back_door_outlined),
+                title: Text('Logout'),
+                onTap: () async{
+                 try{
+                   await SharedPrefsHelper.clearAll();
+                   await _auth.signOut();
+                   Get.offAll(LoginScreen());
+                 }catch(e){
+                    print("Error during logout: $e");
+                 }
                 },
               ),
             ],

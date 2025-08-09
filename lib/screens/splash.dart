@@ -19,10 +19,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
   goToLoginScreen() {
     Future.delayed(const Duration(seconds: 2), () async {
-      final token = _auth.currentUser!.getIdToken();
-
-      if (token != null) {
-        if (_auth.currentUser != null) {
+      if (_auth.currentUser != null) {
+        final token = await _auth.currentUser!.getIdToken();
+        if (token != null) {
           try {
             await SharedPrefsHelper.saveUserDetails(
               image: _auth.currentUser!.photoURL ?? "",
