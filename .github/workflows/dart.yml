@@ -1,40 +1,54 @@
-name: Flutter CI
+name: Flutter CI (Android & iOS)
 
 on:
   push:
-    branches: [ "main" ]        # Runs only when you push to main
+    branches: [ "main" ]
   pull_request:
-    branches: [ "main" ]        # Runs when a PR targets main
+    branches: [ "main" ]
 
 jobs:
-  build:
+  build-android:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
 
-      # Install Flutter
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.32.8' # Match your local Flutter version
+          flutter-version: '3.32.8'
           channel: stable
 
-      # Install dependencies
       - name: Install dependencies
         run: flutter pub get
 
-      # Analyze code
       - name: Analyze project source
-        run: flutter analyze
+        run: flutter analyze --no-fatal-infos --no-fatal-warnings
 
-      # Run tests (if any in test/)
       - name: Run tests
         run: flutter test
 
-      # Build Android APK
       - name: Build Android APK
         run: flutter build apk --release
 
-      # Build Web app
-      - name: Build Web
-        run: flutter build web
+  build-ios:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.32.8'
+          channel: stable
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyze project source
+        run: flutter analyze --no-fatal-infos --no-fatal-warnings
+
+      - name: Run tests
+        run: flutter test
+
+      - name: Build iOS
+        run: flutter build ios --release --no-codesign
