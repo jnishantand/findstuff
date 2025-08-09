@@ -10,7 +10,7 @@ class Constants{
    static final Color defaultTextColor = Colors.black87;
     static final Color primaryColor = Colors.blue;
     static final Color secondaryColor = Colors.grey;
-    static final Color backgroundColor = Colors.white;
+    static final Color backgroundColor = Colors.grey.shade200;
     static final Color errorColor = Colors.red;
     static final Color successColor = Colors.green;
     static final Color warningColor = Colors.orange;

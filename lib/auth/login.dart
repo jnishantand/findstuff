@@ -1,4 +1,5 @@
 import 'package:find_stuff/auth/reset_screen.dart' show PasswordResetScreen;
+import 'package:find_stuff/auth/welcome.dart' show WelcomePage;
 import 'package:find_stuff/screens/home_screen.dart' show HomeScreen;
 import 'package:find_stuff/screens/splash.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +45,10 @@ class _AuthPageState extends State<AuthPage> {
         const SnackBar(content: Text("Account created successfully")),
       );
 
-      Get.offAll(() => const SplashScreen());
+
+
+      Get.offAll(() => const WelcomePage());
+
     } on FirebaseAuthException catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(e.message ?? "An error occurred")),

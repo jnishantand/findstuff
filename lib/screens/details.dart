@@ -1,3 +1,4 @@
+import 'package:find_stuff/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -7,7 +8,7 @@ class ItemDetailsPage extends StatelessWidget {
   final String location;
   final String uploaderUserId;
   final String uploaderPhoneNumber;
-
+  final String description;
 
   const ItemDetailsPage({
     Key? key,
@@ -16,6 +17,7 @@ class ItemDetailsPage extends StatelessWidget {
     required this.location,
     required this.uploaderUserId,
     required this.uploaderPhoneNumber,
+    required this.description,
   }) : super(key: key);
 
   void _callUploader() async {
@@ -38,6 +40,7 @@ class ItemDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Theme.of(context).primaryColor,
         title: Text('Item Details'),
       ),
       body: SingleChildScrollView(
@@ -58,7 +61,7 @@ class ItemDetailsPage extends StatelessWidget {
                       return Center(child: CircularProgressIndicator());
                     },
                     errorBuilder: (context, error, stackTrace) =>
-                    const Center(child: Icon(Icons.broken_image)),
+                        const Center(child: Icon(Icons.broken_image)),
                   );
                 },
               ),
@@ -66,9 +69,7 @@ class ItemDetailsPage extends StatelessWidget {
             const SizedBox(height: 16),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text(
-                itemName,
-              ),
+              child: CustomText(text: itemName, isBold: true),
             ),
             const SizedBox(height: 8),
             Padding(
@@ -77,13 +78,28 @@ class ItemDetailsPage extends StatelessWidget {
                 children: [
                   const Icon(Icons.location_on, color: Colors.grey),
                   const SizedBox(width: 4),
-                  Text(
-                    location,
-                  ),
+                  Text(location),
                 ],
               ),
             ),
             const SizedBox(height: 24),
+
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey.shade300),
+              ),
+              margin: EdgeInsets.all(18.0),
+              padding: EdgeInsets.all(18.0),
+              width: MediaQuery.of(context).size.width,
+              child: Text(
+                description ?? 'No description available.',
+                style: const TextStyle(fontSize: 16, color: Colors.black87),
+                textAlign: TextAlign.justify,
+              ),
+            ),
+
+            const SizedBox(height: 24),
+
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(

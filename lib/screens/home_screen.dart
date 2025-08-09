@@ -1,4 +1,3 @@
-
 import 'package:find_stuff/auth/login.dart' show AuthPage;
 import 'package:find_stuff/constants.dart';
 import 'package:find_stuff/models/categories.dart' show Category;
@@ -57,7 +56,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Constants.backgroundColor,
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).primaryColor,
         onPressed: () {
           Get.to(() => const AddFoundItemPage());
         },
@@ -67,6 +68,11 @@ class _HomeScreenState extends State<HomeScreen> {
       drawer: SafeArea(
         child: Container(
           decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey.shade300, width: 1.0),
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(20),
+              bottomRight: Radius.circular(20.0),
+            ),
             color: Colors.white,
             boxShadow: const [
               BoxShadow(
@@ -77,38 +83,49 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
           width: MediaQuery.of(context).size.width * 0.8,
-          child: Column(
+          child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              ListTile(
-                leading: const Icon(Icons.person),
-                title: const Text('Profile'),
-                onTap: () {
-                  Get.to(() => const ProfileScreen());
-                },
+              Column(
+                children: [
+                  ListTile(
+                    leading: const Icon(Icons.person),
+                    title: const Text('Profile'),
+                    onTap: () {
+                      Get.to(() => const ProfileScreen());
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.door_back_door_outlined),
+                    title: const Text('Logout'),
+                    onTap: () async {
+                      try {
+                        await SharedPrefsHelper.clearAll();
+                        await _auth.signOut();
+                        Get.offAll(() => const AuthPage());
+                      } catch (e) {
+                        debugPrint("Error during logout: $e");
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Logout failed, please try again'),
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                ],
               ),
-              ListTile(
-                leading: const Icon(Icons.door_back_door_outlined),
-                title: const Text('Logout'),
-                onTap: () async {
-                  try {
-                    await SharedPrefsHelper.clearAll();
-                    await _auth.signOut();
-                    Get.offAll(() => const AuthPage());
-                  } catch (e) {
-                    debugPrint("Error during logout: $e");
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Logout failed, please try again'),
-                      ),
-                    );
-                  }
-                },
+              Text("Version 1.0.0",
+                style: TextStyle(
+                  color: Colors.grey.shade600,
+                  fontSize: 12,
+                ),
               ),
             ],
           ),
         ),
       ),
       appBar: AppBar(
+        backgroundColor: Theme.of(context).primaryColor,
         leading: InkWell(
           onTap: () {
             if (_scaffoldKey.currentState != null &&
@@ -118,15 +135,20 @@ class _HomeScreenState extends State<HomeScreen> {
           },
           child: const SizedBox(height: 50, width: 50, child: Icon(Icons.menu)),
         ),
-        title:  Text("Find Stuff"),
+        title: Text("Find Stuff"),
         automaticallyImplyLeading: true,
         centerTitle: true,
-        actions:  [
+        actions: [
           InkWell(
-            onTap: (){
+            onTap: () {
               Get.to(() => const NotificationScreen());
             },
-              child: SizedBox(height: 50, width: 50, child: Icon(Icons.notifications))),
+            child: SizedBox(
+              height: 50,
+              width: 50,
+              child: Icon(Icons.notifications),
+            ),
+          ),
         ],
       ),
       body: Padding(
@@ -164,7 +186,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                           child: Card(
                             color: isSelected
-                                ? Constants.primaryColor
+                                ? Theme.of(context).primaryColor
                                 : Colors.white,
                             child: Container(
                               width: 140,
@@ -222,7 +244,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         final data = items[index];
                         final imageUrl = data['imageUrl'] as String?;
                         return ListTile(
-                          onTap: (){
+                          onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -235,10 +257,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                   location: data['address'] ?? 'NA',
                                   uploaderUserId: 'user123',
                                   uploaderPhoneNumber: '+911234567890',
+                                  description:
+                                      data['description'] ?? 'No description',
                                 ),
                               ),
                             );
-
                           },
                           leading: (imageUrl != null && imageUrl.isNotEmpty)
                               ? Image.network(
@@ -248,7 +271,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   fit: BoxFit.cover,
                                 )
                               : const Icon(Icons.image_not_supported),
-                          title: Text(data['title'] ?? 'No title'),
+                          title: CustomText(text:data['title'] ?? 'No title',isBold: true,),
                           subtitle: Text(data['address'] ?? ''),
                         );
                       },
@@ -263,4 +286,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-

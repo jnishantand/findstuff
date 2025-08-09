@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:find_stuff/constants.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -93,7 +94,10 @@ class _AddFoundItemPageState extends State<AddFoundItemPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Add Found Item")),
+      backgroundColor: Constants.backgroundColor,
+      appBar: AppBar(
+          backgroundColor: Theme.of(context).primaryColor,
+          title: const Text("Add Found Item")),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Form(
@@ -175,8 +179,15 @@ class _AddFoundItemPageState extends State<AddFoundItemPage> {
               isLoading
                   ? const Center(child: CircularProgressIndicator())
                   : ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).primaryColor,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                ),
                 onPressed: submitItem,
-                child: const Text("Submit"),
+                child: const Text("Submit",style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.white,
+                )),
               ),
             ],
           ),
