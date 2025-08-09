@@ -1,5 +1,4 @@
-import 'package:find_stuff/services/local/shared_prefrence.dart'
-    show SharedPrefsHelper;
+import 'package:find_stuff/services/local/shared_prefrence.dart' show SharedPrefsHelper;
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -16,57 +15,55 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   void initState() {
-    getLocalData();
     super.initState();
+    getLocalData();
+  }
+
+  Future<void> getLocalData() async {
+    final localName = await SharedPrefsHelper.getName();
+    final localEmail = await SharedPrefsHelper.getEmail();
+    final localPhoto = await SharedPrefsHelper.getImage();
+
+    setState(() {
+      name = localName ?? 'User';
+      email = localEmail ?? 'Email not found';
+      photo = localPhoto;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'HI ${name??"User"}',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: 20),
-                CircleAvatar(
-                  radius: 50,
-                  backgroundImage: AssetImage('assets/profile_picture.png'),
-                ),
-                SizedBox(height: 20),
-                Text(
-                  email ?? "Name not found",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-                ),
-              ],
-            ),
+      appBar: AppBar(
+        title: const Text('Profile'),
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Hi $name',
+                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 20),
+              CircleAvatar(
+                radius: 50,
+                backgroundImage: (photo != null && photo!.isNotEmpty)
+                    ? NetworkImage(photo!)
+                    : const AssetImage('assets/profile_picture.png') as ImageProvider,
+              ),
+              const SizedBox(height: 20),
+              Text(
+                email ?? "Email not found",
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
-  }
-
-  getLocalData() async {
-    await SharedPrefsHelper.getName().then((val) {
-      if (val != null) {
-        name = val.toString();
-      }
-    });
-    await SharedPrefsHelper.getEmail().then((val) {
-      if (val != null) {
-        email = val.toString();
-      }
-    });
-    await SharedPrefsHelper.getImage().then((val) {
-      if (val != null) {
-        photo = val.toString();
-      }
-    });
-    setState(() {});
   }
 }

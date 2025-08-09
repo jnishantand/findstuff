@@ -1,8 +1,6 @@
 import 'package:find_stuff/auth/login.dart' show AuthPage;
 import 'package:find_stuff/screens/home_screen.dart' show HomeScreen;
-import 'package:find_stuff/screens/login_screen.dart';
-import 'package:find_stuff/services/local/shared_prefrence.dart'
-    show SharedPrefsHelper;
+import 'package:find_stuff/services/local/shared_prefrence.dart' show SharedPrefsHelper;
 import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,38 +13,42 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance; // mark final
 
-  goToLoginScreen() {
+  void goToLoginScreen() {
     Future.delayed(const Duration(seconds: 2), () async {
       if (_auth.currentUser != null) {
-        final token = await _auth.currentUser!.getIdToken();
-        if (token != null) {
-          try {
-            await SharedPrefsHelper.saveUserDetails(
-              image: _auth.currentUser!.photoURL ?? "",
-              name: _auth.currentUser!.displayName ?? "",
-              email: _auth.currentUser!.email ?? "",
-              token: token.toString() ?? "",
-              id: _auth.currentUser!.uid ?? "",
-              phone: _auth.currentUser!.phoneNumber ?? "",
-            );
-          } catch (e) {
-            print("Error in getting token: $e");
-          }
+        try {
+          final token = await _auth.currentUser!.getIdToken();
+          // token.toString() is never null, so no need for ??
+          await SharedPrefsHelper.saveUserDetails(
+            image: _auth.currentUser!.photoURL ?? "",
+            name: _auth.currentUser!.displayName ?? "",
+            email: _auth.currentUser!.email ?? "",
+            token: token.toString(),
+            id: _auth.currentUser!.uid ?? "",
+            phone: _auth.currentUser!.phoneNumber ?? "",
+          );
+        } catch (e) {
+          // Replace print with a proper logger or remove
+          // For now, you can use debugPrint which is recommended
+          debugPrint("Error in getting token: $e");
         }
-
-        Get.offAll(() => HomeScreen());
+        if (mounted) {
+          Get.offAll(() => HomeScreen());
+        }
       } else {
-        Get.offAll(() => AuthPage());
+        if (mounted) {
+          Get.offAll(() => AuthPage());
+        }
       }
     });
   }
 
   @override
   void initState() {
-    goToLoginScreen();
     super.initState();
+    goToLoginScreen();
   }
 
   @override
@@ -55,7 +57,7 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [Text('Find your lost items')],
+          children: const [Text('Find your lost items')],
         ),
       ),
     );

@@ -14,7 +14,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Container(
           decoration: BoxDecoration(
             color: Colors.white,
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(
                 color: Colors.black26,
                 blurRadius: 10.0,
@@ -36,23 +36,26 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             children: [
               ListTile(
-                leading: Icon(Icons.person),
-                title: Text('Profile'),
+                leading: const Icon(Icons.person),
+                title: const Text('Profile'),
                 onTap: () {
-                  Get.to(ProfileScreen());
+                  Get.to(() => const ProfileScreen());
                 },
               ),
               ListTile(
-                leading: Icon(Icons.door_back_door_outlined),
-                title: Text('Logout'),
-                onTap: () async{
-                 try{
-                   await SharedPrefsHelper.clearAll();
-                   await _auth.signOut();
-                   Get.offAll(LoginScreen());
-                 }catch(e){
-                    print("Error during logout: $e");
-                 }
+                leading: const Icon(Icons.door_back_door_outlined),
+                title: const Text('Logout'),
+                onTap: () async {
+                  try {
+                    await SharedPrefsHelper.clearAll();
+                    await _auth.signOut();
+                    Get.offAll(() => const LoginScreen());
+                  } catch (e) {
+                    debugPrint("Error during logout: $e");
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Logout failed, please try again')),
+                    );
+                  }
                 },
               ),
             ],
@@ -61,29 +64,35 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       appBar: AppBar(
         leading: InkWell(
-          onTap: (){
-            _scaffoldKey.currentState!.openDrawer();
+          onTap: () {
+            if (_scaffoldKey.currentState != null && !_scaffoldKey.currentState!.isDrawerOpen) {
+              _scaffoldKey.currentState!.openDrawer();
+            }
           },
-          child: SizedBox(
-
-              height: 50, width: 50, child: Icon(Icons.menu)),
+          child: const SizedBox(
+            height: 50,
+            width: 50,
+            child: Icon(Icons.menu),
+          ),
         ),
-        title: Text("Find Stuff"),
+        title: const Text("Find Stuff"),
         automaticallyImplyLeading: true,
         centerTitle: true,
-        actions: [SizedBox(height: 50, width: 50, child: Icon(Icons.settings))],
+        actions: const [
+          SizedBox(height: 50, width: 50, child: Icon(Icons.settings)),
+        ],
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Welcome to the Home Screen'),
-            SizedBox(height: 20),
+            const Text('Welcome to the Home Screen'),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 // Add your button action here
               },
-              child: Text('Click Me'),
+              child: const Text('Click Me'),
             ),
           ],
         ),
