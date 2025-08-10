@@ -2,6 +2,16 @@
 
 A new Flutter project.
 
+Technology:
+Flutter 3.32.8,
+Tools Dart 3.8.1,
+DevTools 2.45.1
+
+openjdk 11.0.25 2024-10-15
+OpenJDK Runtime Environment Temurin-11.0.25+9 (build 11.0.25+9)
+OpenJDK 64-Bit Server VM Temurin-11.0.25+9 (build 11.0.25+9, mixed mode)
+ndkVersion = "27.0.12077973"
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
