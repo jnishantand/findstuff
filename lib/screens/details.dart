@@ -10,6 +10,7 @@ class ItemDetailsPage extends StatelessWidget {
   final String uploaderPhoneNumber;
   final String description;
 
+
   const ItemDetailsPage({
     Key? key,
     required this.imageUrls,
@@ -21,9 +22,11 @@ class ItemDetailsPage extends StatelessWidget {
   }) : super(key: key);
 
   void _callUploader() async {
+
+    print("Calling uploader: $uploaderPhoneNumber");
     final Uri callUri = Uri(scheme: 'tel', path: uploaderPhoneNumber);
     if (await canLaunchUrl(callUri)) {
-      await launchUrl(callUri);
+     // await launchUrl(callUri);
     } else {
       // Handle error if cannot launch phone dialer
       debugPrint('Could not launch $callUri');
@@ -112,7 +115,7 @@ class ItemDetailsPage extends StatelessWidget {
                   const SizedBox(width: 16),
                   ElevatedButton.icon(
                     icon: const Icon(Icons.call),
-                    label: const Text('Call Uploader'),
+                    label: Text('${uploaderPhoneNumber??"NA"} '),
                     onPressed: _callUploader,
                   ),
                 ],
