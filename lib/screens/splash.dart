@@ -1,6 +1,7 @@
 import 'package:find_stuff/auth/login.dart' show AuthPage;
 import 'package:find_stuff/screens/home_screen.dart' show HomeScreen;
 import 'package:find_stuff/services/local/shared_prefrence.dart' show SharedPrefsHelper;
+import 'package:find_stuff/widgets/custom_text.dart';
 import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -37,6 +38,7 @@ class _SplashScreenState extends State<SplashScreen> {
         if (mounted) {
           Get.offAll(() => HomeScreen());
         }
+
       } else {
         if (mounted) {
           Get.offAll(() => AuthPage());
@@ -57,7 +59,13 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [Text('Find your lost items')],
+          children:  [
+            Image.asset(
+              'assets/images/app_logo.png',
+              width: 100,
+              height: 100,
+            ),
+            CustomText(text: 'Find your lost items',isBold: true,)],
         ),
       ),
     );

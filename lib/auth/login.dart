@@ -1,4 +1,5 @@
 import 'package:find_stuff/auth/reset_screen.dart' show PasswordResetScreen;
+import 'package:find_stuff/auth/welcome.dart' show WelcomePage;
 import 'package:find_stuff/screens/home_screen.dart' show HomeScreen;
 import 'package:find_stuff/screens/splash.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +45,10 @@ class _AuthPageState extends State<AuthPage> {
         const SnackBar(content: Text("Account created successfully")),
       );
 
-      Get.offAll(() => const SplashScreen());
+
+
+      Get.offAll(() => const WelcomePage());
+
     } on FirebaseAuthException catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(e.message ?? "An error occurred")),
@@ -94,45 +98,47 @@ class _AuthPageState extends State<AuthPage> {
       appBar: AppBar(title: const Text("Firebase Email Auth")),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: emailController,
-              keyboardType: TextInputType.emailAddress,
-              decoration: const InputDecoration(labelText: "Email"),
-            ),
-            TextField(
-              controller: passwordController,
-              obscureText: true,
-              decoration: const InputDecoration(labelText: "Password"),
-            ),
-            const SizedBox(height: 20),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: signUp,
-                child: const Text("Sign Up"),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              TextField(
+                controller: emailController,
+                keyboardType: TextInputType.emailAddress,
+                decoration: const InputDecoration(labelText: "Email"),
               ),
-            ),
-            const SizedBox(height: 10),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: login,
-                child: const Text("Login"),
+              TextField(
+                controller: passwordController,
+                obscureText: true,
+                decoration: const InputDecoration(labelText: "Password"),
               ),
-            ),
-            const SizedBox(height: 10),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: "Rest Password".isEmpty ? null : () {
-                  Get.to(() => const PasswordResetScreen());
-                },
-                child: const Text("Reset Password"),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: signUp,
+                  child: const Text("Sign Up"),
+                ),
               ),
-            ),
-          ],
+              const SizedBox(height: 10),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: login,
+                  child: const Text("Login"),
+                ),
+              ),
+              const SizedBox(height: 10),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: "Rest Password".isEmpty ? null : () {
+                    Get.to(() => const PasswordResetScreen());
+                  },
+                  child: const Text("Reset Password"),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
