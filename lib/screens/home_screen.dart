@@ -1,8 +1,11 @@
 
+import 'package:find_stuff/auth/login.dart' show AuthPage;
 import 'package:find_stuff/constants.dart';
 import 'package:find_stuff/models/categories.dart' show Category;
 import 'package:find_stuff/screens/add_item.dart' show AddFoundItemPage;
+import 'package:find_stuff/screens/details.dart' show ItemDetailsPage;
 import 'package:find_stuff/screens/login_screen.dart';
+import 'package:find_stuff/screens/notification_screen.dart';
 import 'package:find_stuff/screens/profile_screen.dart';
 import 'package:find_stuff/services/local/shared_prefrence.dart'
     show SharedPrefsHelper;
@@ -90,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   try {
                     await SharedPrefsHelper.clearAll();
                     await _auth.signOut();
-                    Get.offAll(() => const LoginScreen());
+                    Get.offAll(() => const AuthPage());
                   } catch (e) {
                     debugPrint("Error during logout: $e");
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -115,11 +118,15 @@ class _HomeScreenState extends State<HomeScreen> {
           },
           child: const SizedBox(height: 50, width: 50, child: Icon(Icons.menu)),
         ),
-        title: const Text("Find Stuff"),
+        title:  Text("Find Stuff"),
         automaticallyImplyLeading: true,
         centerTitle: true,
-        actions: const [
-          SizedBox(height: 50, width: 50, child: Icon(Icons.settings)),
+        actions:  [
+          InkWell(
+            onTap: (){
+              Get.to(() => const NotificationScreen());
+            },
+              child: SizedBox(height: 50, width: 50, child: Icon(Icons.notifications))),
         ],
       ),
       body: Padding(
@@ -215,6 +222,24 @@ class _HomeScreenState extends State<HomeScreen> {
                         final data = items[index];
                         final imageUrl = data['imageUrl'] as String?;
                         return ListTile(
+                          onTap: (){
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => ItemDetailsPage(
+                                  imageUrls: [
+                                    'https://example.com/image1.jpg',
+                                    'https://example.com/image2.jpg',
+                                  ],
+                                  itemName: data['title'] ?? 'No title',
+                                  location: data['address'] ?? 'NA',
+                                  uploaderUserId: 'user123',
+                                  uploaderPhoneNumber: '+911234567890',
+                                ),
+                              ),
+                            );
+
+                          },
                           leading: (imageUrl != null && imageUrl.isNotEmpty)
                               ? Image.network(
                                   imageUrl,
