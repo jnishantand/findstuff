@@ -6,6 +6,7 @@ import 'package:find_stuff/screens/details.dart' show ItemDetailsPage;
 import 'package:find_stuff/screens/login_screen.dart';
 import 'package:find_stuff/screens/my_list.dart' show MyFoundItemsPage;
 import 'package:find_stuff/screens/notification_screen.dart';
+import 'package:find_stuff/screens/privacy_policy.dart';
 import 'package:find_stuff/screens/profile_screen.dart';
 import 'package:find_stuff/services/local/shared_prefrence.dart'
     show SharedPrefsHelper;
@@ -113,6 +114,23 @@ class _HomeScreenState extends State<HomeScreen> {
                       }
                     },
                   ),
+                  ListTile(
+                    leading: const Icon(Icons.list),
+                    title: const Text('Privacy Policy'),
+                    onTap: () async {
+                      try {
+                        Get.to(() => const PrivacyPolicyPage());
+                      } catch (e) {
+                        debugPrint("Error navigating to My Posts: $e");
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Failed to load your posts'),
+                          ),
+                        );
+                      }
+                    },
+                  ),
+
                   ListTile(
                     leading: const Icon(Icons.door_back_door_outlined),
                     title: const Text('Logout'),
