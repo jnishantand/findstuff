@@ -57,13 +57,11 @@ class MyFoundItemsPage extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (_) => ItemDetailsPage(
-                          imageUrls: imageUrl != null && imageUrl.isNotEmpty
-                              ? [imageUrl]
-                              : [],
+                          imageUrls: imageUrl != null && imageUrl.isNotEmpty ? [imageUrl] : [],
                           itemName: data['title'] ?? 'No title',
                           location: data['address'] ?? 'NA',
                           uploaderUserId: data['userId'] ?? '',
-                          uploaderPhoneNumber: data['contact']??"NA",
+                          uploaderPhoneNumber: data['contact'] ?? "NA",
                           description: data['description'] ?? 'No description',
                         ),
                       ),
@@ -82,7 +80,46 @@ class MyFoundItemsPage extends StatelessWidget {
                     isBold: true,
                   ),
                   subtitle: Text(data['address'] ?? ''),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete, color: Colors.red),
+                    onPressed: () async {
+                      final shouldDelete = await showDialog<bool>(
+                        context: context,
+                        builder: (ctx) => AlertDialog(
+                          title: const Text('Confirm Delete'),
+                          content: const Text('Are you sure you want to delete this item?'),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(ctx).pop(false),
+                              child: const Text('Cancel'),
+                            ),
+                            TextButton(
+                              onPressed: () => Navigator.of(ctx).pop(true),
+                              child: const Text('Delete'),
+                            ),
+                          ],
+                        ),
+                      );
+
+                      if (shouldDelete == true) {
+                        try {
+                          await FirebaseFirestore.instance
+                              .collection('found_items')
+                              .doc(data.id) // Use the document ID to delete
+                              .delete();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Item deleted successfully')),
+                          );
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Failed to delete item: $e')),
+                          );
+                        }
+                      }
+                    },
+                  ),
                 );
+
               },
             );
           },

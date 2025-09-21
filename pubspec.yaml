@@ -46,7 +46,15 @@ dependencies:
   url_launcher: ^6.3.2
   firebase_messaging: ^15.2.10
   flutter_local_notifications: ^19.4.0
- # flutter_launcher_icons:
+  webview_flutter: ^4.13.0
+
+  share_plus: ^11.1.0
+  uuid: ^4.5.1
+
+  flutter_bluetooth_serial_plus: ^0.5.1
+  flutter_stripe: ^12.0.2
+
+  # flutter_launcher_icons:
 
 dev_dependencies:
   flutter_test:
